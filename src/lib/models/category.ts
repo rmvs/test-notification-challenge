@@ -1,6 +1,3 @@
-import { Message } from "./message";
-import { User } from "./user";
-
 export enum CategoryType {
     SPORTS="SPORTS",FINANCE="FINANCE",MOVIES="MOVIES"
 }
