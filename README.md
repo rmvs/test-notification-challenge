@@ -25,5 +25,3 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-There's two API routes that can be accessed on [http://localhost:3000/api/history](http://localhost:3000/api/history) and [http://localhost:3000/api/notifications](http://localhost:3000/api/notifications).
