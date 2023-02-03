@@ -1,29 +1,35 @@
 import { Message } from "./message";
 import { User } from "./user";
 
+export enum CategoryType {
+    SPORTS="SPORTS",FINANCE="FINANCE",MOVIES="MOVIES"
+}
+
 export class Category {    
-    constructor(private id: string){
+    constructor(private _type: CategoryType){
 
     }
-    getID(): string {
-        return this.id;        
+
+    get type(): CategoryType {
+        return this._type;
     }
+    
 }
 
 export class Sports extends Category {
     constructor(){
-        super("SPORTS")
+        super(CategoryType.SPORTS)
     }
 }
 
 export class Finance extends Category {
     constructor(){
-        super("FINANCE");
+        super(CategoryType.FINANCE);
     }
 }
 
 export class Movies extends Category {
     constructor(){
-        super("MOVIES");
+        super(CategoryType.MOVIES);
     }
 }

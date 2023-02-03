@@ -1,8 +1,11 @@
 import uuid from "react-uuid";
-import { Category } from "./category";
+import { CategoryType } from "./category";
 
 export class Message {
-    constructor(public category: Category, public message: string, public id: string = uuid()){
+    constructor(
+        public type: CategoryType, 
+        public message: string,
+        public id: string = uuid()){
 
     }
 }

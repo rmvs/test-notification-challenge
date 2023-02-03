@@ -1,7 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { channelSlice, messageSlice } from './features';
 
 export const store = configureStore({
-    reducer: {}
+    reducer: {
+      channelData: channelSlice,
+      messageData: messageSlice
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+      serializableCheck: false
+    })
 })
 
 export type AppDispatch = typeof store.dispatch;

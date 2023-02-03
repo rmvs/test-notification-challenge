@@ -1,23 +1,17 @@
+import { store } from "@/store";
 import { EmailStrategy, NotificationStrategy, PushNotificationStrategy, SMSStrategy } from "../business";
 import { Category, EmailNotification, PushNotification, SMSNotification, User } from "../models";
 import { Message } from "../models/message";
 
 export default class ChannelService{
 
-    constructor(private subscribers: User[] = []){
+    constructor(){
         
     }
-
     notify(message: Message){
-        this.subscribers.filter(subscriber =>  subscriber.subscribed.filter(s => s.getID() === message.category.getID()))
-                        .map(({ id, channels }) => channels.forEach(s => s.notify(message,id)))
-    }
+        store.getState().userData.users!!.filter(subscriber =>  subscriber.subscribed.map(v => v.type).includes(message.type))
+                                    .flatMap(user => user.channels)
+                                    .forEach(notification => notification.notify(message));
 
-    subscribeUser(user: User){
-        this.subscribers.push(user);
-    }
-
-    unsubscribeUser(user: User){
-        this.subscribers = [...this.subscribers.filter(s => s.id === user.id)]
     }
 }

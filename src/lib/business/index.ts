@@ -1,27 +1,32 @@
 import { User } from "../models";
 import { Message } from "../models/message";
+import { store } from "@/store";
+import { notify } from "@/features/channel-slice";
+import { NotificationType } from "../models/notification";
 
 export interface NotificationStrategy {
-    notify(message: Message, id: String): void;
+    channelType: NotificationType;
+    notify(message: Message): void;
 }
 
 export class SMSStrategy implements NotificationStrategy{
-    notify(message: Message, id: String): void {
-        throw new Error("Method not implemented.");
-    }
-    
-    
+    channelType: NotificationType = NotificationType.SMS;
+    notify(message: Message): void {
+        store.dispatch(notify({ message, channelType: this.channelType}));  
+    }  
 }
 
 export class EmailStrategy implements NotificationStrategy {
-    notify(message: Message, id: String): void {
-        throw new Error("Method not implemented.");
+    channelType: NotificationType = NotificationType.EMAIL;
+    notify(message: Message): void {
+        store.dispatch(notify({ message, channelType: this.channelType })); 
     }
 
 }
 
 export class PushNotificationStrategy implements NotificationStrategy {
-    notify(message: Message, id: String): void {
-        throw new Error("Method not implemented.");
+    channelType: NotificationType = NotificationType.PUSH;
+    notify(message: Message): void {
+        store.dispatch(notify({ message, channelType: this.channelType })); 
     }
 }

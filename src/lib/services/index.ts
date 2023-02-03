@@ -1,8 +1,7 @@
-import { EmailStrategy, PushNotificationStrategy, SMSStrategy } from "../business";
-import { Finance, Movies, Sports } from "../models";
 import ChannelService from "./channel-service";
-
+import UserService from "./user-service";
 
 const channelService = new ChannelService();
+const userService = new UserService();
 
-export { channelService };
+export { channelService, userService }

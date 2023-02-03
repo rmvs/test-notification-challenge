@@ -1,0 +1,76 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:notifications.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+    id String @id @default(uuid())
+    name String
+    email String
+    phoneNumber String   
+
+    subscriptions Subscription[] @relation(name: "userSubscription")
+    registeredChannels RegisteredChannel[] @relation(name:"registeredUsers")
+    @@map("user")
+}
+
+model RegisteredChannel {
+    id String @id @default(uuid())
+    idChannel String
+    channel Channel @relation(name: "channelRegistration",fields: [idChannel],references: [id])
+
+    idUser String
+    user User @relation(name: "registeredUsers", fields: [idUser], references: [id])
+
+    @@map("registered_channel")
+}
+
+model Channel {
+    id String @id @default(uuid())
+    name String
+
+    registrations RegisteredChannel[] @relation(name: "channelRegistration")
+    // logMessages LogHistory[] @relation(name: "channelMessages")
+
+    @@map("channel")
+}
+
+model Category {
+    id  String @id @default(uuid())
+    name String
+    subscriptions Subscription[] @relation(name: "categorySubscriptions")
+
+    logs LogHistory[] @relation(name: "logHistoryCategories")
+
+    @@map("category")
+}
+
+model Subscription {
+    id  String @id @default(uuid())
+    idCategory String
+    category Category @relation(name:"categorySubscriptions", fields: [idCategory] ,references: [id])
+
+    idUser String
+    user User @relation(name: "userSubscription", fields: [idUser], references: [id])
+
+
+    @@map("subscription")
+}
+
+model LogHistory {
+    id  String @id @default(uuid())
+    message String
+    idCategory String
+    category Category @relation(name: "logHistoryCategories", fields: [idCategory],references: [id])
+    // idSender String
+    // sender User @relation(name:"userHistory",fields: [idSender],references: [id])
+    // idChannel String
+    // channel Channel @relation(name: "channelMessages", fields: [idChannel], references: [id])
+    createdAt DateTime @default(now())
+
+    @@map("log_history")
+}

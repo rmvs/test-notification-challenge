@@ -2,25 +2,37 @@
   "name": "gila-coding-challenge",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed.ts"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup-db": "npx prisma generate --schema src/prisma/schema.prisma && npx prisma migrate dev --schema src/prisma/schema.prisma && npx prisma db seed"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@next/font": "13.1.6",
+    "@prisma/client": "^4.9.0",
     "@reduxjs/toolkit": "^1.9.2",
-    "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "antd": "^5.1.7",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
+    "moment-timezone": "^0.5.40",
     "next": "13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-uuid": "^2.0.0",
-    "typescript": "4.9.5"
+    "react-redux": "^8.0.5",
+    "react-uuid": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "prisma": "^4.9.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
   }
 }
