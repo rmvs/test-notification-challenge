@@ -1,32 +1,38 @@
-import { User } from "../models";
+import { NotificationType, User } from "../models";
 import { Message } from "../models/message";
-import { store } from "@/store";
-import { notify } from "@/features/channel-slice";
-import { NotificationType } from "../models/notification";
 
 export interface NotificationStrategy {
-    channelType: NotificationType;
-    notify(message: Message): void;
+    notify(message: Message, user: User): void;
+    toString(): string;
 }
 
 export class SMSStrategy implements NotificationStrategy{
-    channelType: NotificationType = NotificationType.SMS;
-    notify(message: Message): void {
-        store.dispatch(notify({ message, channelType: this.channelType}));  
+    notify(message: Message,user: User): void {
+        console.log(`MESSAGE ${message.id} SENT TO USER ${user.name}[${user.id}] VIA SMS`); 
     }  
+
+    toString(): string {
+        return NotificationType.SMS;
+    }
 }
 
 export class EmailStrategy implements NotificationStrategy {
-    channelType: NotificationType = NotificationType.EMAIL;
-    notify(message: Message): void {
-        store.dispatch(notify({ message, channelType: this.channelType })); 
+    notify(message: Message, user: User): void {
+        console.log(`MESSAGE ${message.id} SENT TO USER ${user.name}[${user.id}] VIA EMAIL`);
+    }
+
+    toString(): string {
+        return NotificationType.EMAIL;
     }
 
 }
 
 export class PushNotificationStrategy implements NotificationStrategy {
-    channelType: NotificationType = NotificationType.PUSH;
-    notify(message: Message): void {
-        store.dispatch(notify({ message, channelType: this.channelType })); 
+    notify(message: Message, user: User): void {
+        console.log(`MESSAGE ${message.id} SENT TO USER ${user.name}[${user.id}] VIA PUSH`);
+    }
+
+    toString(): string {
+        return NotificationType.PUSH;
     }
 }

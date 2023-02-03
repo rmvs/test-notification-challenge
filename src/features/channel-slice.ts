@@ -1,37 +1,37 @@
+import { CategoryType } from "@/lib/models";
 import { Message } from "@/lib/models/message";
-import { NotificationType } from "@/lib/models/notification";
 import { RootState } from "@/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ChannelState {
-    channels: { [ key: string ]: Message[] },
+    messages: { [key in CategoryType]? : Message[] },
 }
 
 interface MessagePayloadAction {
     message: Message,
-    channelType: NotificationType
 }
 
 const initialState: ChannelState = {
-    channels: { }
+    messages: { }
  };
 
 export const channelSlice = createSlice({
     name: 'channel',
     initialState,
     reducers: {
-        notify: (state, { payload }: PayloadAction<MessagePayloadAction>) => {
-            if(!state.channels[payload.channelType]){                
-                state.channels = { ...state.channels, [ payload.channelType ]: [] }
+        push: (state, { payload: { message } }: PayloadAction<MessagePayloadAction>) => {
+            if(!(message.type in state.messages)){
+                state.messages = { [message.type]: [] }
             }
-
-            state.channels = { ...state.channels, ...{ [payload.channelType] : [...state.channels[payload.channelType], payload.message]} }
-            
+            state.messages[message.type] = [...state.messages[message.type]!!, message]
         },
+        clear: (state, { payload }: PayloadAction<CategoryType>) => {
+            state.messages = { [payload]: [] }
+        }
     }
 })
 
-export const { notify } = channelSlice.actions;
+export const { push, clear } = channelSlice.actions;
 export const channelState = (state: RootState) => state.channelData;
 
 export default channelSlice.reducer;

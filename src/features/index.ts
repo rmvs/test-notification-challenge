@@ -1,4 +1,2 @@
-import channelSlice from "./channel-slice";
-import messageSlice from "./message-slice";
-
-export { channelSlice, messageSlice };
+export { default as channelSlice } from "./channel-slice";
+export { default as messageSlice} from "./message-slice";

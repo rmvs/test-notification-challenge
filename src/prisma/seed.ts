@@ -1,188 +1,146 @@
-import { PrismaClient } from '@prisma/client'
+import {CategoryType, NotificationType}  from '@/lib/models'
+import { Prisma, PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main(){
     console.log('SEEDING DATABASE')
 
+    let categories: any = {}, channels: any = {};
 
-    const sms = await prisma.channel.create({
-        data: {
-            name: "SMS"
-        }
-    })
+    for(const category of Object.keys(CategoryType)){
+        if(! (categories[category] = (await prisma.category.findFirst({ where: { name: category } }))?.id)){
+            categories[category] = (await prisma.category.create({
+                data: {
+                    name: category
+                },
+            })).id
+        }        
+    }
 
-
-    const push = await prisma.channel.create({
-        data: {
-            name: "PUSH NOTIFICATION"
-        }
-    })
-
-    const email = await prisma.channel.create({
-        data: {
-            name: "EMAIL"
-        }
-    })
-
-
-    const sports = await prisma.category.create({
-        data: {
-            name: 'SPORTS'
-        }
-    })
-
-    const finance = await prisma.category.create({
-        data: {
-            name: 'FINANCE'
-        }
-    })
-
-    const movies = await prisma.category.create({
-        data: {
-            name: 'MOVIES'
-        }
-    })
-
-    const user1 = await prisma.user.create({
-        data: {
-            email: 'john@example.com',
-            phoneNumber: '7777777',
-            name: 'John',
-            subscriptions: {                
-                create: [
-                    {
-                        category: {
-                            connect: {
-                                id: finance.id
-                            }
-                        }
-                    },
-                    {
-                        category: {
-                            connect: {
-                                id: movies.id
-                            }
-                        }
-                    }
-                ]
-            },
-            registeredChannels: {
-                create: [ 
-                    { 
-                        channel: {
-                            connect: {
-                                id: sms.id
-                            }
-                        }
-                    },
-                    {
-                        channel: {
-                            connect: {
-                                id: email.id
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        include: {
-            registeredChannels: {
-                include: {
-                    channel: true
+    for(const notification of Object.keys(NotificationType)){
+        if( ! ( channels[notification] = (await prisma.channel.findFirst({ where: { name: notification } })))?.id ){
+            channels[notification] = (await prisma.channel.create({
+                data: {
+                    name: notification
                 }
-            },
-            subscriptions: {
-                include: {
-                    category: true
-                }
-            },
-        }
-    });
-
-
-    const user2 = await prisma.user.create({
-        data: {
-            email: 'mary@example.com',
-            phoneNumber: '7777777',
-            name: 'Mary',
-            registeredChannels: {
-                create: [
-                    {
-                        channel: {
-                            connect: {
-                                id: push.id,
+            })).id
+        }        
+    }
+    
+    if( ! (await prisma.user.findFirst({where: { email: 'john@example.com' }}))){
+        await prisma.user.create({
+            data: {
+                email: 'john@example.com',
+                phoneNumber: '7777777',
+                name: 'John',
+                subscriptions: {                
+                    create: [
+                        {
+                            category: {
+                                connect: {
+                                    id: categories[CategoryType.FINANCE],               
+                                }
                             }
                         },
-                    },{
+                        {
+                            category: {
+                                connect: {
+                                    id: categories[CategoryType.SPORTS]
+                                }
+                            }
+                        }
+                    ]
+                },
+                registeredChannels: {
+                    create: [
+                        {
+                            channel: {
+                                connect: {
+                                    id: channels[NotificationType.PUSH],
+                                }
+                            }
+                        },
+                        {
+                            channel: {
+                                connect: {
+                                    id: channels[NotificationType.SMS]
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+        });
+    } 
+    
+    if( !( await prisma.user.findFirst({ where: { email: 'mary@example.com'} })) ){
+        await prisma.user.create({
+            data: {
+                email: 'mary@example.com',
+                phoneNumber: '7777777',
+                name: 'Mary',
+                registeredChannels: {
+                    create: [
+                        {
+                            channel: {
+                                connect: {
+                                    id: channels[NotificationType.PUSH]
+                                }
+                            },
+                        },
+                        {
+                            channel: {
+                                connect: {
+                                    id: channels[NotificationType.EMAIL]
+                                }
+                            }
+                        }
+                    ]
+                },
+                subscriptions: {
+                    create: [
+                        {
+                            category: {
+                                connect: {
+                                    id: categories[CategoryType.SPORTS]
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        });
+    }  
+    
+    if( ! await prisma.user.findFirst({ where: { email: 'edward@example.com'} }) ){
+        await prisma.user.create({
+            data: {
+                email: 'edward@example.com',
+                phoneNumber: '7777777',
+                name: 'Edward',
+                registeredChannels: {
+                    create: {
                         channel: {
                             connect: {
-                                id: email.id
+                                id: channels[NotificationType.PUSH]
                             }
                         }
                     }
-                ]
-            },
-            subscriptions: {
-                create: [
-                    {
-                        category: {
-                            connect: {
-                                id: sports.id
+                },
+                subscriptions: {
+                    create: [
+                        {
+                            category: {
+                                connect: {
+                                    id: categories[CategoryType.MOVIES]
+                                }
                             }
                         }
-                    }
-                ]
-            }
-        },
-        include: {
-            registeredChannels: {
-                include: {
-                    channel: true
-                }
-            },
-            subscriptions: {
-                include: {
-                    category: true
+                    ]
                 }
             }
-        }
-    });
-
-    const user3 = await prisma.user.create({
-        data: {
-            email: 'edward@example.com',
-            phoneNumber: '7777777',
-            name: 'Edward',
-            registeredChannels: {
-                create: {
-                    channel: {
-                        connect: {
-                            id: sms.id
-                        }
-                    }
-                }
-            },
-            subscriptions: {
-                create: [
-                    {
-                        category: {
-                            connect: {
-                                id: finance.id
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        include: {
-            registeredChannels: true,
-            subscriptions: {
-                include: {
-                    category: true
-                }
-            }
-        }
-    });    
+        });
+    }        
 }
 
 main()

@@ -1,39 +1,38 @@
 import { EmailStrategy, NotificationStrategy, PushNotificationStrategy, SMSStrategy } from "../business"
 import { Message } from "./message";
+import { User } from "./user";
 
 export enum NotificationType {
     SMS="SMS",EMAIL="EMAIL",PUSH="PUSH"
 }
 
+const NotificationStrategies = {
+    [NotificationType.SMS]: new SMSStrategy(),
+    [NotificationType.PUSH]: new PushNotificationStrategy(),
+    [NotificationType.EMAIL]: new EmailStrategy()
+}
+
 export class Notification {
-    constructor(private _strategy: NotificationStrategy){
 
+    private _strategy: NotificationStrategy | null = null;
+
+    constructor(private _notificationType: NotificationType){
+        this._strategy = NotificationStrategies[_notificationType];
     }
 
-    notify(message: Message){
-        this._strategy.notify(message)
+    get strategy(): NotificationStrategy {
+        return this._strategy!!;
     }
 
-    get type(): NotificationType {
-        return this._strategy.channelType;
+    set strategy(strategy: NotificationStrategy){
+        this._strategy = strategy;
     }
-    
-}
 
-export class SMSNotification extends Notification {
-    constructor(){
-        super(new SMSStrategy())
+    notify(message: Message, user: User){
+        this._strategy!!.notify(message, user)
     }
-}
 
-export class EmailNotification extends Notification {
-    constructor(){
-        super(new EmailStrategy())
-    }
-}
-
-export class PushNotification extends Notification {
-    constructor(){
-        super(new PushNotificationStrategy())
+    public toString(): String{
+        return this._strategy?.toString()!!;
     }
 }

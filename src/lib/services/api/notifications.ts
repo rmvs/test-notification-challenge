@@ -7,7 +7,7 @@ export default class NotificationsAPI {
     }
 
     post(data: any){
-        return this.rest.post(API_ENDPOINTS.NOTIFICATIONS,data);
+        return this.rest.post(API_ENDPOINTS.HISTORY,data);
     }
 
     getHistory(){

@@ -1,4 +1,4 @@
-import { MessageTypes } from "@/pages/components/message"
+import { MessageTypes } from "@/components/message"
 import { RootState } from "@/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 

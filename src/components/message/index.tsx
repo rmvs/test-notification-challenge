@@ -22,7 +22,6 @@ export function MessageNotification(props: any){
                 messageApi.error(alert.data)
             }
         }
-              
     },[alert, messageApi])
 
 

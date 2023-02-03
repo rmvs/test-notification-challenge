@@ -3,14 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed.ts"
+    "seed": "ts-node -r tsconfig-paths/register --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed.ts"
+  },
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "setup-db": "npx prisma generate --schema src/prisma/schema.prisma && npx prisma migrate dev --name init --schema src/prisma/schema.prisma && npx prisma db seed"
+    "setup-db": "npx prisma generate --schema src/prisma/schema.prisma && npx prisma migrate dev --name init --schema src/prisma/schema.prisma"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -33,6 +38,7 @@
     "@types/node": "^18.11.18",
     "prisma": "^4.9.0",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
     "typescript": "^4.9.5"
   }
 }

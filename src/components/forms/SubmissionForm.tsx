@@ -1,4 +1,4 @@
-import { notify } from "@/features/channel-slice";
+import { push } from "@/features/channel-slice";
 import { alert } from "@/features/message-slice";
 import { useAppDispatch } from "@/hooks";
 import { CategoryType } from "@/lib/models";
@@ -20,8 +20,7 @@ export default function SubmissionForm(props: any){
     
     const submitForm = async({ category, message}: any) => {
 
-      dispatch(notify({
-        channelType: NotificationType.EMAIL,
+      dispatch(push({
         message: {
           id: uuid(),
           type: category,
@@ -88,9 +87,5 @@ export default function SubmissionForm(props: any){
               </Form.Item>
             </Form>
           </>
-        // style={{width:500}}
-        // <Card title="Notification form">
-        
-        // </Card>
     )
 }

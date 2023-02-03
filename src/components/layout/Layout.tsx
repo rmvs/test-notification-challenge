@@ -1,16 +1,13 @@
 import React from "react";
 
-import { Breadcrumb, Layout as AntdLayout, Menu, theme } from 'antd';
+import { Layout as AntdLayout, Menu, } from 'antd';
 import Meta from "./Meta";
-const { Header, Content, Sider } = AntdLayout;
+const { Header, Content } = AntdLayout;
 
 
-export default function Layout({ children, items, ...props }:{ children: React.ReactNode, items: any[] }) {
-
-    const { token: { colorBgContainer } } = theme.useToken();
+export default function Layout({ children, items }:{ children: React.ReactNode, items: any[] }) {
     
     const metaProps = { title: 'Notification Test', description: 'Gila Software Coding Challenge' }
-    // backgroundColor: colorBgContainer
     return (
         <>
             <Meta {...metaProps} />

@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  test-notification-challenge:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: test-notification-challenge
+    container_name: test-notification-challenge
+    ports:
+      - '8000:8000'

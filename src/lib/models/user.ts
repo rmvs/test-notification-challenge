@@ -1,8 +1,7 @@
 import { Category } from "./category";
 import { Notification } from "./notification";
 
-export class User {    
-    
+export class User {  
     
     constructor(
         private _id: string,
@@ -27,15 +26,19 @@ export class User {
     }
 
     set subscribed(_category: Category[]){
-        this._subscribed = [...this.subscribed, ..._category]
+        this._subscribed = _category
     }
 
     get subscribed(): Category[]{
         return this._subscribed;        
     }
 
-    get channels(): Notification[] {
+    get notification(): Notification[] {
         return this._notification
+    }
+
+    set notification(_notification: Notification[]){
+        this._notification = _notification
     }
 
 }
